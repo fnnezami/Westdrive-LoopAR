@@ -69,6 +69,7 @@ public class PersistentTrafficEventManager : MonoBehaviour
             eventListener.AvoidInterference(10f);
         }
         _participantsControlSwitch.SwitchControl();
+        PlayerPrefs.SetInt("Event", 1);
     }
 
     private void FinalizeEvent()
@@ -80,6 +81,7 @@ public class PersistentTrafficEventManager : MonoBehaviour
         }
         
         _participantsControlSwitch.SwitchControl();
+        PlayerPrefs.SetInt("Event", 0);
     }
 
     public GameObject GetParticipantsCar()

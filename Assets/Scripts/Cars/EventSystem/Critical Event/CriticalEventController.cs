@@ -3,43 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class CriticalEventController: MonoBehaviour
+public class CriticalEventController : MonoBehaviour
 {
-    [Space] [Header("Triggers")]
+    [Space]
+    [Header("Triggers")]
     [SerializeField] private TrafficEventTrigger startTrigger;
     [SerializeField] private TrafficEventTrigger endTrigger;
-    
-    [Space] [Header("Accident Case")]
+
+    [Space]
+    [Header("Accident Case")]
     [Tooltip("The gameobject which is the parents of the accident elements")] [SerializeField] private GameObject testAccident;
     [Tooltip("Should the testAccident be active or not when experiment begins")] [SerializeField] private bool active;
-    
+
     private RestrictedZoneTrigger[] _restrictedZoneTriggers;
 
     private GameObject _targetedCar;
+    
 
     private bool _activatedEvent;
-    
+
     void Start()
     {
-        if(PersistentTrafficEventManager.Instance!=null)
+        if (PersistentTrafficEventManager.Instance != null)
             _targetedCar = PersistentTrafficEventManager.Instance.GetParticipantsCar();
-        
+
         startTrigger.TargetVehicle(_targetedCar);
         endTrigger.TargetVehicle(_targetedCar);
-        
+
         startTrigger.SetController(this);
         endTrigger.SetController(this);
-        
+
         _restrictedZoneTriggers = GetComponentsInChildren<RestrictedZoneTrigger>();
 
-       DeactivateRestrictedZones();
+        DeactivateRestrictedZones();
 
-       if (active)
-           testAccident.SetActive(true);
+        if (active)
+            testAccident.SetActive(true);
         else
-           testAccident.SetActive(false);
+            testAccident.SetActive(false);
     }
-    
+
 
     public void Triggered()
     {
@@ -53,13 +56,18 @@ public class CriticalEventController: MonoBehaviour
         else
         {
             DeactivateRestrictedZones();
-            
+
             if (!active)
                 testAccident.SetActive(false);
         }
-        
+
     }
 
+    
+    public GameObject GetTransform(){
+        return testAccident;
+
+    }
     private void ActivateRestrictedZones()
     {
         foreach (var restrictedZoneTrigger in _restrictedZoneTriggers)
@@ -76,8 +84,8 @@ public class CriticalEventController: MonoBehaviour
             _activatedEvent = false;
         }
     }
-    
-    
-    
-    
+
+
+
+
 }
