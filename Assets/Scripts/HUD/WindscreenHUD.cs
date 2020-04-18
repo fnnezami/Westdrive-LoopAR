@@ -46,12 +46,12 @@ public class WindscreenHUD : MonoBehaviour
         _EventController = GameObject.Find("MvPCriticalTrafficEvents").transform.GetChild(p).GetComponent<CriticalEventController>();
         _manualController = TestAuto.GetComponent<ManualController>();
         m_Collider = GameObject.Find("Starting Trigger").transform.GetChild(p).GetComponent<BoxCollider>();
-       
+
     }
     public void EventStart()
     {
 
-        
+
         if (m_Collider.enabled)
         {
             m_Collider.enabled = !m_Collider.enabled;
@@ -62,19 +62,16 @@ public class WindscreenHUD : MonoBehaviour
         EventAnzeigen.SetActive(true);
         TestAccident = _EventController.GetTransform();
         other = GameObject.Find("Center").gameObject;
+
+
+
         
-
-
-        //foreach (Transform child in TestAccident.transform)
-        //{
-            //other = child.gameObject;
-            if (currentCollider.Contains(other.gameObject) == false)
-            {
-                currentCollider.Add(other.gameObject);
-                Kreis = Instantiate(KreisFuerEvents);
-                Kreis.transform.SetParent(other.gameObject.transform, false);
-            }
-        //}
+        if (currentCollider.Contains(other.gameObject) == false)
+        {
+            currentCollider.Add(other.gameObject);
+            Kreis = Instantiate(KreisFuerEvents);
+            Kreis.transform.SetParent(other.gameObject.transform, false);
+        }
 
 
 
@@ -235,7 +232,7 @@ public class WindscreenHUD : MonoBehaviour
         var today = System.DateTime.Now;
         Date.text = today.ToString("HH:mm");
         //MaxSpeed
-        
+
         Weather.text = "Westbrueck \n 22°C";
 
         NonEventAnzeigen.SetActive(true);
