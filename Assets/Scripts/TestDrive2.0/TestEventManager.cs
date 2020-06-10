@@ -96,7 +96,7 @@ public class TestEventManager : MonoBehaviour
     
     IEnumerator PassControl()
     {
-        yield return new WaitForSeconds(timeForControl);
+        yield return new WaitForSecondsRealtime(timeForControl);
         ControlEnded();
     }
     
@@ -108,7 +108,7 @@ public class TestEventManager : MonoBehaviour
             yield break;
         }
         car.GetComponent<ControlSwitch>().SwitchControl(manualControl);
-        yield return new WaitForSeconds(timeForControl);
+        yield return new WaitForSecondsRealtime(timeForControl);
         ControlEnded();
     }
 

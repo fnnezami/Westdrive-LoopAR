@@ -25,14 +25,10 @@ public class ResetObjectPositionTrigger : MonoBehaviour
 
     private void ResetCar(GameObject objectToReset)
     {
-        if (objectToReset.GetComponent<CarController>())
-        {
-            objectToReset.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            objectToReset.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        objectToReset.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        objectToReset.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-            objectToReset.transform.SetPositionAndRotation(resetPosition.position, resetPosition.rotation);
-        }
-        
+        objectToReset.transform.SetPositionAndRotation(resetPosition.position, resetPosition.rotation);
     }
 
     private void OnTriggerEnter(Collider other)
