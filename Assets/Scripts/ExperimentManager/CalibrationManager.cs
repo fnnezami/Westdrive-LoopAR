@@ -88,15 +88,19 @@ public class CalibrationManager : MonoBehaviour
         SceneLoader.Instance.AsyncLoad(3);
     }
     
-    public void TestDriveSuccessful()
+    public void TestDriveSuccessState(bool state, int trials)
     {
-        _testDriveSuccessful = true;
-        SceneLoader.Instance.AsyncLoad(0);
+        _testDriveSuccessful = state;
+        // todo serialize the info
     }
 
-    public void TestDriveFailed()
+    /*public void TestDriveFailed()
     {
         // todo save the failed data onto the calibration data
+    }*/
+
+    public void TestDriveEnded()
+    {
         SceneLoader.Instance.AsyncLoad(0);
     }
 

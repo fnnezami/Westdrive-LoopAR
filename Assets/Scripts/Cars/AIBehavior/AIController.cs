@@ -203,4 +203,9 @@ public class AIController : MonoBehaviour
     {
         return reverse;
     }
+
+    public void SetNewPath(BezierSplines newPath)
+    {
+        path = newPath;
+    }
 }
