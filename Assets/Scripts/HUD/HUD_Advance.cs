@@ -22,6 +22,7 @@ public class HUD_Advance : MonoBehaviour
     public Text Speed;
     public Text MaxSpeed, Date, Weather;
     public Image SpeedGauge;
+    public RawImage Kreis;
     public RawImage AIDriving;
 
     [Header("Event End")]
@@ -47,7 +48,6 @@ public class HUD_Advance : MonoBehaviour
     public float TimeTillWarningSound;
     [SerializeField] private List<GameObject> _eventObjectsToMark;
     [SerializeField] private List<GameObject> _highlightedObjects;
-    [SerializeField] private GameObject _objectToHighlight;
 
     [Header("No Event AI Drive")]
     [SerializeField] private int speedLimit;
@@ -74,38 +74,52 @@ public class HUD_Advance : MonoBehaviour
     void Start()
     {
         _aimedSpeed = _carController.gameObject.GetComponent<AimedSpeed>();
-        CreateLists();
+        if (!IsEvent)
+        {
+            WarningText.enabled = false;
+            WarningTriangle.enabled = false;
+            TorBackSign.enabled = false;
+            TorBackText.enabled = false;
+            if (!ManualDriving)
+            {
+                AIDrive();
+            }
+            else
+            {
+                ManualDrive();
+            }
+            //Debug.Log("Dreieck Aus");
+        }
 
     }
-    public void CreateLists()
+    public void ActivateHUD(GameObject testAccidentObject)
     {
-        //First Take Over Request Objects(TorObjects)
-        TorObjectsList.Add(TorBackSign);
-        TorObjectsList.Add(TorBackText);
-        //NonEvent Displayed Objects are not displayed in case of event
-        if (!ManualDriving)
+        List<GameObject> ObjectToMark = new List<GameObject>();
+        ObjectToMark.Add(testAccidentObject);
+        ActivateHUD(ObjectToMark);
+
+    }
+
+    public void ActivateHUD(List<GameObject> testAccidentSubjects)
+    {
+        _eventObjectsToMark = testAccidentSubjects;
+        MarkObjects();
+    }
+
+    private void MarkObjects()
+    {
+        foreach (var eventObject in _eventObjectsToMark)
         {
-            NonEventDisplay.Add(AIDriving);
+            GameObject clone = Instantiate(highlightSymbol, eventObject.transform);
+            clone.transform.localPosition = Vector3.RotateTowards(transform.forward, Camera.main.transform.position, 0, 0.0f);
+            _highlightedObjects.Add(clone);
         }
-        if (!TimeShow)
-        {
-            NonEventDisplay.Add(Date);
-        }
-        if (!SpeedShow)
-        {
-            NonEventDisplay.Add(Speed);
-        }
-        if (SpeedLimitShow)
-        {
-            NonEventDisplay.Add(MaxSpeed);
-        }
-        //EvenDisplays are not Displayed in case of no Event
-        EventDisplay.Add(WarningText);
-        EventDisplay.Add(WarningTriangle);
     }
     public void DeactivateHUD()
     {
         IsEvent = false;
+        _eventObjectsToMark.Clear();
+        _highlightedObjects.Clear();
         if (!ManualDriving)
         {
             AIDrive();
@@ -115,6 +129,7 @@ public class HUD_Advance : MonoBehaviour
             ManualDrive();
         }
     }
+
     public void DriverAlert()
     {
         IsEvent = true;
@@ -126,45 +141,101 @@ public class HUD_Advance : MonoBehaviour
         //Take over request back Image && Text && Sound -> maybe Blinking 
         //start NonEventDisplays
         //start AI DrivingSign
-        BlinkFreq = TorBackBlinkingFrequency;
-        BlinkLength = TorBackBlinkingLength;
-        coroutine = Blink(BlinkFreq, BlinkLength, TorObjectsList);
+
+        Debug.Log("Aidrive start");
+
+        if (TorBackBlinkingImage || TorBackBlinkingText)
+        {
+            BlinkFreq = TorBackBlinkingFrequency;
+            BlinkLength = TorBackBlinkingLength;
+            coroutine = Blink(BlinkFreq, BlinkLength);
+            StartCoroutine(Blink(BlinkFreq, BlinkLength));
+
+        }
+
+
+        Date.enabled = true;
+        Speed.enabled = true;
+        SpeedGauge.enabled = true;
+        MaxSpeed.enabled = true;
+        Kreis.enabled = true;
+        Weather.enabled = true;
+
+
 
 
     }
     public void ManualDrive()
-    {
-        //You are driving
+    {        //You are driving
         //start NonEventDisplays
         //No TORBack no Sound 
-
-
     }
     public void EventDrive()
     {
+        if (TimeShow) Date.enabled = false;
+        if (SpeedShow) Speed.enabled = false;
+        if (SpeedShow) SpeedGauge.enabled = false;
+        if (SpeedLimitShow) MaxSpeed.enabled = false;
+        if (SpeedLimitShow) Kreis.enabled = false;
+        Weather.enabled = false;
         //Warning Sound && Triangle && Text && Blinking
         //Verbal Warning
         //
-        BlinkFreq = BlinkingFrequence;
-        BlinkLength = BlinkingForTime;
-        coroutine = Blink(BlinkFreq, BlinkLength, EventDisplay);
+        if (BlinkingText || BlinkingTriangle)
+        {
+            BlinkFreq = BlinkingFrequence;
+            BlinkLength = BlinkingForTime;
+            coroutine = Blink(BlinkFreq, BlinkLength);
+            StartCoroutine(Blink(BlinkFreq, BlinkLength));
+        }
 
     }
-    private IEnumerator Blink(float BlinkFreq, float BlinkLength,ArrayList Displays)
+    private IEnumerator Blink(float BlinkFreq, float BlinkLength)
     {
-        float EndTime = Time.time + BlinkLength;
-        while (Time.time < EndTime)
+        //Debug.Log("Basd"+BlinkFreq + " "+ BlinkLength);
+        //float EndTime = Time.time + BlinkLength;
+        int i = 0;
+        float EndI = BlinkFreq * BlinkLength;
+        while (i < EndI)
         {
-            foreach (GameObject obj in Displays)
+            Debug.Log("in der Zeitschleife " );
+            if (IsEvent)
             {
-                obj.SetActive(true);
+
+                if (BlinkingText)
+                {
+                    WarningText.enabled = true;
+                }
+                if (BlinkingTriangle) WarningTriangle.enabled = true;
+
             }
-            yield return new WaitForSeconds(1f / BlinkFreq);
-            foreach (GameObject obj in Displays)
+            else
             {
-                obj.SetActive(false);
+                yield return new WaitForSeconds(3f);
+                TorBackSign.enabled = true;
+                TorBackText.enabled = true;
+
             }
-            yield return new WaitForSeconds(1f / BlinkFreq);
+            i++;
+            yield return new WaitForSeconds(0.2f);
+
+            Debug.Log(i);
+            if (IsEvent)
+            {
+                WarningText.enabled = false;
+                WarningTriangle.enabled = false;
+
+            }
+            else
+            {
+                Debug.Log(Time.time + " Time "  + " " + BlinkFreq);
+
+                Debug.Log(" WarningText");
+                TorBackSign.enabled = false;
+                TorBackText.enabled = false;
+            }
+            yield return new WaitForSeconds(0.2f);
+            //yield return null;
 
         }
     }
