@@ -16,14 +16,17 @@ public class HUD_Advance : MonoBehaviour
     public Text WarningText;
     public AudioClip WarningVerbalSound, WarningSound;
     public RawImage YouDriving;
+    public Text YouDrivingText;
     public GameObject highlightSymbol;
 
     [Header("No Event")]
     public Text Speed;
     public Text MaxSpeed, Date, Weather;
     public Image SpeedGauge;
-    public RawImage Kreis;
+    public RawImage Circle;
+    private bool AIDrivingBool = false;
     public RawImage AIDriving;
+    public Text AIDrivingText;
 
     [Header("Event End")]
     public RawImage TorBackSign;
@@ -40,12 +43,12 @@ public class HUD_Advance : MonoBehaviour
     public bool IsEvent;
     public bool TimeShow, SpeedShow, SpeedLimitShow;
     public float TimeTillWarningSign;
-    public float BlinkingFrequence;
-    public float BlinkingForTime;
+    public float BlinkingFrequence = 3;
+    public float BlinkingForTime = 2;
     public bool BlinkingText;
     public bool BlinkingTriangle;
     public float TimeTillSound;
-    public float TimeTillWarningSound;
+    public float TimeTillWarningSound, WarningSignDuration = 2;
     [SerializeField] private List<GameObject> _eventObjectsToMark;
     [SerializeField] private List<GameObject> _highlightedObjects;
 
@@ -56,8 +59,8 @@ public class HUD_Advance : MonoBehaviour
 
     [SerializeField] private float speed;
     private int EventCount;
-    public float TorBackBlinkingFrequency;
-    public float TorBackBlinkingLength;
+    public float TorBackBlinkingFrequency = 3;
+    public float TorBackBlinkingLength = 2, TorBackDuration = 2;
     public bool TorBackBlinkingText, TorBackBlinkingImage;
     [Header("No Event Manual Drive")]
     public bool ManualDriving;
@@ -74,12 +77,12 @@ public class HUD_Advance : MonoBehaviour
     void Start()
     {
         _aimedSpeed = _carController.gameObject.GetComponent<AimedSpeed>();
+        WarningText.enabled = false;
+        WarningTriangle.enabled = false;
+        TorBackSign.enabled = false;
+        TorBackText.enabled = false;
         if (!IsEvent)
         {
-            WarningText.enabled = false;
-            WarningTriangle.enabled = false;
-            TorBackSign.enabled = false;
-            TorBackText.enabled = false;
             if (!ManualDriving)
             {
                 AIDrive();
@@ -133,11 +136,15 @@ public class HUD_Advance : MonoBehaviour
     public void DriverAlert()
     {
         IsEvent = true;
+        AIDrivingBool = false;
         EventDrive();
 
     }
     public void AIDrive()
     {
+        AIDrivingBool = true;
+        YouDriving.enabled = false;
+        YouDrivingText.enabled = false;
         //Take over request back Image && Text && Sound -> maybe Blinking 
         //start NonEventDisplays
         //start AI DrivingSign
@@ -148,17 +155,21 @@ public class HUD_Advance : MonoBehaviour
         {
             BlinkFreq = TorBackBlinkingFrequency;
             BlinkLength = TorBackBlinkingLength;
-            coroutine = Blink(BlinkFreq, BlinkLength);
+            //coroutine = Blink(BlinkFreq, BlinkLength);
             StartCoroutine(Blink(BlinkFreq, BlinkLength));
 
         }
-
+        else
+        {
+            StartCoroutine(ShowForSeconds(TorBackDuration));
+        }
+        StartCoroutine(ShowAfterSeconds());
 
         Date.enabled = true;
         Speed.enabled = true;
         SpeedGauge.enabled = true;
         MaxSpeed.enabled = true;
-        Kreis.enabled = true;
+        Circle.enabled = true;
         Weather.enabled = true;
 
 
@@ -167,8 +178,22 @@ public class HUD_Advance : MonoBehaviour
     }
     public void ManualDrive()
     {        //You are driving
+        ManualDriving = true;
+        AIDrivingBool = false;
+
+        StartCoroutine(ShowForSeconds(TorBackDuration));
         //start NonEventDisplays
+        
+        Date.enabled = true;
+        Speed.enabled = true;
+        SpeedGauge.enabled = true;
+        MaxSpeed.enabled = true;
+        Circle.enabled = true;
+        Weather.enabled = true;
+        AIDrivingText.enabled = false;
+        AIDriving.enabled = false;
         //No TORBack no Sound 
+        StartCoroutine(ShowAfterSeconds());
     }
     public void EventDrive()
     {
@@ -176,8 +201,11 @@ public class HUD_Advance : MonoBehaviour
         if (SpeedShow) Speed.enabled = false;
         if (SpeedShow) SpeedGauge.enabled = false;
         if (SpeedLimitShow) MaxSpeed.enabled = false;
-        if (SpeedLimitShow) Kreis.enabled = false;
+        if (SpeedLimitShow) Circle.enabled = false;
         Weather.enabled = false;
+        
+        AIDrivingText.enabled = false;
+        AIDriving.enabled = false;
         //Warning Sound && Triangle && Text && Blinking
         //Verbal Warning
         //
@@ -185,20 +213,75 @@ public class HUD_Advance : MonoBehaviour
         {
             BlinkFreq = BlinkingFrequence;
             BlinkLength = BlinkingForTime;
-            coroutine = Blink(BlinkFreq, BlinkLength);
+            //coroutine = Blink(BlinkFreq, BlinkLength);
             StartCoroutine(Blink(BlinkFreq, BlinkLength));
         }
+        else
+        {
+            StartCoroutine(ShowForSeconds(WarningSignDuration));
+        }
+        StartCoroutine(ShowAfterSeconds());
+
+    }
+    private IEnumerator ShowAfterSeconds(){
+        yield return new WaitForSeconds(3f);
+        if (IsEvent||ManualDriving)
+        {
+            
+            YouDriving.enabled = true;
+            YouDrivingText.enabled = true;
+        }
+
+        if (AIDrivingBool)
+        {
+            AIDrivingText.enabled = true;
+            AIDriving.enabled = true;
+        }
+    }
+    private IEnumerator ShowForSeconds(float TorBackDuration)
+    {
+        if (IsEvent)
+        {
+            yield return new WaitForSeconds(TimeTillWarningSign);
+            Debug.Log("Warnung");
+
+            WarningText.enabled = true;
+            WarningTriangle.enabled = true;
+        }
+        if (ManualDriving)
+        {
+            yield return new WaitForSeconds(3f);
+            YouDriving.enabled = true;
+            YouDrivingText.enabled = true;
+        }
+        if (AIDrivingBool)
+        {
+            Debug.Log("TOR");
+            WarningText.enabled = false;
+            WarningTriangle.enabled = false;
+            TorBackSign.enabled = true;
+            TorBackText.enabled = true;
+
+        }
+        yield return new WaitForSeconds(TorBackDuration);
+        WarningText.enabled = false;
+        WarningTriangle.enabled = false;
+        TorBackSign.enabled = false;
+        TorBackText.enabled = false;
+        
 
     }
     private IEnumerator Blink(float BlinkFreq, float BlinkLength)
     {
-        //Debug.Log("Basd"+BlinkFreq + " "+ BlinkLength);
-        //float EndTime = Time.time + BlinkLength;
+        WarningText.enabled = false;
+        WarningTriangle.enabled = false;
+        TorBackSign.enabled = false;
+        TorBackText.enabled = false;
         int i = 0;
         float EndI = BlinkFreq * BlinkLength;
         while (i < EndI)
         {
-            Debug.Log("in der Zeitschleife " );
+
             if (IsEvent)
             {
 
@@ -211,15 +294,15 @@ public class HUD_Advance : MonoBehaviour
             }
             else
             {
-                yield return new WaitForSeconds(3f);
+                //yield return new WaitForSeconds(3f);
                 TorBackSign.enabled = true;
                 TorBackText.enabled = true;
 
             }
             i++;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(1f / BlinkFreq);
 
-            Debug.Log(i);
+            //Debug.Log(i);
             if (IsEvent)
             {
                 WarningText.enabled = false;
@@ -228,16 +311,17 @@ public class HUD_Advance : MonoBehaviour
             }
             else
             {
-                Debug.Log(Time.time + " Time "  + " " + BlinkFreq);
-
-                Debug.Log(" WarningText");
                 TorBackSign.enabled = false;
                 TorBackText.enabled = false;
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(1f / BlinkFreq);
             //yield return null;
 
         }
+        WarningText.enabled = false;
+        WarningTriangle.enabled = false;
+        TorBackSign.enabled = false;
+        TorBackText.enabled = false;
     }
 
     // Update is called once per frame

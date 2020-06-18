@@ -514,7 +514,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2339734188211499623}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
@@ -1240,7 +1240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7603177185357803337
 Transform:
   m_ObjectHideFlags: 0
@@ -1674,7 +1674,7 @@ GameObject:
   - component: {fileID: 2870910782250257498}
   - component: {fileID: 1693553998515463877}
   m_Layer: 0
-  m_Name: Kreis
+  m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1947,6 +1947,7 @@ MonoBehaviour:
   WarningVerbalSound: {fileID: 8300000, guid: 3bf413af5dd990544aed0c20e07dc3d7, type: 3}
   WarningSound: {fileID: 8300000, guid: d8404ddbf37b06145a76174d41f59e00, type: 3}
   YouDriving: {fileID: 5530680678394398441}
+  YouDrivingText: {fileID: 6506400157428931132}
   highlightSymbol: {fileID: 1129814321788449467, guid: 8388aa2c35765324c9e56255b809997a,
     type: 3}
   Speed: {fileID: 1236921551563698518}
@@ -1954,8 +1955,9 @@ MonoBehaviour:
   Date: {fileID: 4692262430511450130}
   Weather: {fileID: 5626886131221771140}
   SpeedGauge: {fileID: 8175598019841947257}
-  Kreis: {fileID: 1693553998515463877}
+  Circle: {fileID: 1693553998515463877}
   AIDriving: {fileID: 1240699911984314727}
+  AIDrivingText: {fileID: 5738255573952551039}
   TorBackSign: {fileID: 8174445706249222770}
   TorBackText: {fileID: 8039506098319674296}
   TorBackSound: {fileID: 8300000, guid: b554a51699a1d064dbc7b949aeb7cf2a, type: 3}
@@ -1972,6 +1974,7 @@ MonoBehaviour:
   BlinkingTriangle: 0
   TimeTillSound: 0
   TimeTillWarningSound: 0
+  WarningSignDuration: 2
   _eventObjectsToMark: []
   _highlightedObjects: []
   speedLimit: 0
@@ -1979,6 +1982,7 @@ MonoBehaviour:
   speed: 0
   TorBackBlinkingFrequency: 0
   TorBackBlinkingLength: 0
+  TorBackDuration: 2
   TorBackBlinkingText: 0
   TorBackBlinkingImage: 0
   ManualDriving: 0
@@ -2252,7 +2256,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8295115404335647942}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
