@@ -12,7 +12,6 @@ public class HUD_Advance : MonoBehaviour
 
 
     public AudioSource audioSource;
-    public AudioSource audioSource2;
 
     public RawImage WarningTriangle;
     public Text WarningText;
@@ -65,6 +64,7 @@ public class HUD_Advance : MonoBehaviour
     public bool TorBackBlinkingText, TorBackBlinkingImage;
     [Header("No Event Manual Drive")]
     public bool ManualDriving;
+    private bool EventDriving;
     private float BlinkFreq;
     private float BlinkLength;
 
@@ -112,9 +112,7 @@ public class HUD_Advance : MonoBehaviour
 
             outline.OutlineMode = Outline.Mode.OutlineVisible;
             outline.OutlineColor = Color.red;
-            outline.OutlineWidth = 10f;
-            //GameObject clone = Instantiate(highlightSymbol, eventObject.transform);
-            //clone.transform.localPosition = Vector3.RotateTowards(transform.forward, Camera.main.transform.position, 0, 0.0f);
+            outline.OutlineWidth = 5f;
             _highlightedObjects.Add(eventObject);
         }
     }
@@ -137,18 +135,23 @@ public class HUD_Advance : MonoBehaviour
     {
         IsEvent = true;
         AIDrivingBool = false;
-        EventDrive();
+        if(!EventDriving){
+        EventDrive();}
 
     }
     public void AIDrive()
     {
         AIDrivingBool = true;
+        EventDriving = false;
         YouDriving.enabled = false;
         YouDrivingText.enabled = false;
         //Take over request back Image && Text && Sound -> maybe Blinking 
         //start NonEventDisplays
         //start AI DrivingSign
         Debug.Log("Aidrive start");
+        
+        StartCoroutine(SoundManagerTOR());
+        StartCoroutine(ShowAfterSeconds());
 
         if (TorBackBlinkingImage || TorBackBlinkingText)
         {
@@ -160,8 +163,6 @@ public class HUD_Advance : MonoBehaviour
         {
             StartCoroutine(ShowForSeconds(TorBackDuration));
         }
-        StartCoroutine(SoundManagerTOR());
-        StartCoroutine(ShowAfterSeconds());
 
         Date.enabled = true;
         Speed.enabled = true;
@@ -197,6 +198,7 @@ public class HUD_Advance : MonoBehaviour
     }
     public void EventDrive()
     {
+        EventDriving = true;
         if (!TimeShow) Date.enabled = false;
         if (!SpeedShow) Speed.enabled = false;
         if (!SpeedShow) SpeedGauge.enabled = false;
@@ -220,35 +222,42 @@ public class HUD_Advance : MonoBehaviour
         {
             StartCoroutine(ShowForSeconds(WarningSignDuration));
         }
+        //Debug.Log("Warum bin ich hier?");
         StartCoroutine(SoundManagerWarning());
         StartCoroutine(ShowAfterSeconds());
 
     }
     private IEnumerator SoundManagerTOR()
     {
+        IsEvent = false;
         audioSource.Stop();
-        audioSource2.Stop();
         yield return new WaitForSeconds(0.2f);
-        audioSource.clip = TorBackSound;
-        audioSource.Play();
+        //audioSource.clip = ;
+        audioSource.PlayOneShot(TorBackSound);
+        yield return new WaitForSeconds(120f);
+        
         yield return null;
         StopCoroutine(SoundManagerTOR());
     }
     private IEnumerator SoundManagerWarning()
     {
-        audioSource.clip = WarningSound;
-        audioSource2.clip = WarningVerbalSound;
-        audioSource.Play();
-        yield return new WaitForSeconds(2f);
-        audioSource2.Play();
+        if (IsEvent)
+        {
+            Debug.Log("Event? " + IsEvent );
+            //audioSource.clip = ;
 
-
-        Debug.Log("musik");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("Musik Ende");
-        audioSource.Stop();
-        audioSource2.Stop();
-        StopCoroutine(SoundManagerWarning());
+            audioSource.PlayOneShot(WarningSound);
+            yield return new WaitForSeconds(0.7f);
+            //audioSource.clip = ;
+            audioSource.PlayOneShot(WarningVerbalSound);
+            yield return new WaitForSeconds(1.2f);
+            //audioSource.clip = WarningSound;
+            //audioSource.PlayOneShot(WarningSound);
+            yield return new WaitForSeconds(0.7f);
+            
+            audioSource.Stop();
+            StopCoroutine(SoundManagerWarning());
+        }
     }
     private IEnumerator ShowAfterSeconds()
     {
@@ -285,9 +294,11 @@ public class HUD_Advance : MonoBehaviour
             {
                 TorBackSign.enabled = true;
                 TorBackText.enabled = true;
+                Debug.Log(" Tor startet");
             }
 
         }
+        Debug.Log("Tor sollte Enden");
         yield return new WaitForSeconds(TorBackDuration);
         WarningText.enabled = false;
         WarningTriangle.enabled = false;
@@ -353,15 +364,6 @@ public class HUD_Advance : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (IsEvent)
-        {
-            //NonEventAnzeigen.SetActive(true);
-        }
-        else
-        {
-
-            //NonEventAnzeigen.SetActive(false);
-        }
         // If the next update is reached
         if (Time.time >= nextUpdate)
         {

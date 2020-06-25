@@ -187,6 +187,7 @@ public class ExperimentManager : MonoBehaviour
         participantsCar.transform.SetPositionAndRotation(_respawnPosition, _respawnRotation);
         participantsCar.GetComponent<AIController>().SetLocalTarget();
         StartCoroutine(RespawnParticipant(respawnDelay));
+
     }
     
     IEnumerator RespawnParticipant(float seconds)
@@ -194,6 +195,8 @@ public class ExperimentManager : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         participantsCar.transform.parent.gameObject.SetActive(true);
         blackScreen.SetActive(false);
+        participantsCar.GetComponentInChildren<HUD_Advance>().DeactivateHUD();
+
     }
 
     public void SetRespawnPositionAndRotation(Vector3 position, Quaternion rotation)
