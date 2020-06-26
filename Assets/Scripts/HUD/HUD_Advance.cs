@@ -18,7 +18,7 @@ public class HUD_Advance : MonoBehaviour
     public AudioClip WarningVerbalSound, WarningSound;
     public RawImage YouDriving;
     public Text YouDrivingText;
-    public GameObject highlightSymbol;
+    
 
     [Header("No Event")]
     public Text Speed;
@@ -37,19 +37,22 @@ public class HUD_Advance : MonoBehaviour
     public AimedSpeed _aimedSpeed;
     public CarController _carController;
 
-    [Space]
+    [Space]  
+    
+    [SerializeField]
     [Header("Event")]
     [Header("Experiment")]
 
-    public bool IsEvent;
-    public bool TimeShow, SpeedShow, SpeedLimitShow;
+    private bool IsEvent;
+    public bool TimeShow, SpeedShow, SpeedLimitShow, ShowRealTime;
+    public string ShowFakeTime;
     public float TimeTillWarningSign;
     public float BlinkingFrequence = 3;
     public float BlinkingForTime = 2;
     public bool BlinkingText;
     public bool BlinkingTriangle;
-    public float TimeTillWarningVoice;
-    public float TimeTillWarningSound, WarningSignDuration = 2;
+    public float TimeTillWarningVoice = 0.7f;
+    public float TimeTillWarningSound = 0, WarningSignDuration = 2;
     [SerializeField] private List<GameObject> _eventObjectsToMark;
     [SerializeField] private List<GameObject> _highlightedObjects;
 
@@ -85,6 +88,7 @@ public class HUD_Advance : MonoBehaviour
             else
             {
                 ManualDrive();
+                _carController.gameObject.GetComponent<ControlSwitch>().SwitchControl(ManualDriving);
             }
             //Debug.Log("Dreieck Aus");
         }
@@ -135,8 +139,10 @@ public class HUD_Advance : MonoBehaviour
     {
         IsEvent = true;
         AIDrivingBool = false;
-        if(!EventDriving){
-        EventDrive();}
+        if (!EventDriving)
+        {
+            EventDrive();
+        }
 
     }
     public void AIDrive()
@@ -149,15 +155,18 @@ public class HUD_Advance : MonoBehaviour
         //start NonEventDisplays
         //start AI DrivingSign
         Debug.Log("Aidrive start");
-        
+
         StartCoroutine(SoundManagerTOR());
         StartCoroutine(ShowAfterSeconds());
 
         if (TorBackBlinkingImage || TorBackBlinkingText)
         {
-            BlinkFreq = TorBackBlinkingFrequency;
-            BlinkLength = TorBackBlinkingLength;
-            StartCoroutine(Blink(BlinkFreq, BlinkLength));
+            if (nextUpdate > 10)
+            {
+                BlinkFreq = TorBackBlinkingFrequency;
+                BlinkLength = TorBackBlinkingLength;
+                StartCoroutine(Blink(BlinkFreq, BlinkLength));
+            }
         }
         else
         {
@@ -215,7 +224,6 @@ public class HUD_Advance : MonoBehaviour
         {
             BlinkFreq = BlinkingFrequence;
             BlinkLength = BlinkingForTime;
-            //coroutine = Blink(BlinkFreq, BlinkLength);
             StartCoroutine(Blink(BlinkFreq, BlinkLength));
         }
         else
@@ -235,7 +243,7 @@ public class HUD_Advance : MonoBehaviour
         //audioSource.clip = ;
         audioSource.PlayOneShot(TorBackSound);
         yield return new WaitForSeconds(120f);
-        
+
         yield return null;
         StopCoroutine(SoundManagerTOR());
     }
@@ -243,18 +251,13 @@ public class HUD_Advance : MonoBehaviour
     {
         if (IsEvent)
         {
-            Debug.Log("Event? " + IsEvent );
-            //audioSource.clip = ;
-
+            yield return new WaitForSeconds(TimeTillWarningSound);
             audioSource.PlayOneShot(WarningSound);
-            yield return new WaitForSeconds(0.7f);
-            //audioSource.clip = ;
+            yield return new WaitForSeconds(TimeTillWarningVoice);
             audioSource.PlayOneShot(WarningVerbalSound);
             yield return new WaitForSeconds(1.2f);
-            //audioSource.clip = WarningSound;
-            //audioSource.PlayOneShot(WarningSound);
             yield return new WaitForSeconds(0.7f);
-            
+
             audioSource.Stop();
             StopCoroutine(SoundManagerWarning());
         }
@@ -315,6 +318,9 @@ public class HUD_Advance : MonoBehaviour
         TorBackText.enabled = false;
         int i = 0;
         float EndI = BlinkFreq * BlinkLength;
+        if (!BlinkingText || !BlinkingTriangle) StartCoroutine(ShowForSeconds(BlinkLength));
+        if (!TorBackBlinkingImage || !TorBackBlinkingText) StartCoroutine(ShowForSeconds(BlinkLength));
+
         while (i < EndI)
         {
 
@@ -325,34 +331,33 @@ public class HUD_Advance : MonoBehaviour
                 {
                     WarningText.enabled = true;
                 }
-                if (BlinkingTriangle) WarningTriangle.enabled = true;
+                if (BlinkingTriangle)
+                {
+                    WarningTriangle.enabled = true;
+                }
 
             }
             else
             {
                 //yield return new WaitForSeconds(3f);
-                TorBackSign.enabled = true;
-                TorBackText.enabled = true;
-
+                if (TorBackBlinkingImage) TorBackSign.enabled = true;
+                if (TorBackBlinkingText) TorBackText.enabled = true;
             }
             i++;
-            yield return new WaitForSeconds(1f / BlinkFreq);
+            yield return new WaitForSeconds(0.5f / BlinkFreq);
 
-            //Debug.Log(i);
             if (IsEvent)
             {
-                WarningText.enabled = false;
-                WarningTriangle.enabled = false;
-
+                if (BlinkingText) WarningText.enabled = false;
+                if (BlinkingTriangle) WarningTriangle.enabled = false;
             }
             else
             {
-                TorBackSign.enabled = false;
-                TorBackText.enabled = false;
+                if (TorBackBlinkingImage) TorBackSign.enabled = false;
+                if (TorBackBlinkingText) TorBackText.enabled = false;
             }
-            yield return new WaitForSeconds(1f / BlinkFreq);
+            yield return new WaitForSeconds(0.5f / BlinkFreq);
             //yield return null;
-
         }
         WarningText.enabled = false;
         WarningTriangle.enabled = false;
@@ -399,8 +404,11 @@ public class HUD_Advance : MonoBehaviour
 
             //Datum
             var today = System.DateTime.Now;
-            Date.text = today.ToString("HH:mm");
-            //Date.text = "13:22";
+            if (ShowRealTime)
+            {
+                Date.text = today.ToString("HH:mm");
+            }
+            else { Date.text = ShowFakeTime; }
             //MaxSpeed
             MaxSpeed.text = speedLimit + "";
             Weather.text = "Westbrueck \n 22°C";
