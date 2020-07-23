@@ -407,6 +407,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2861473005738222028, guid: ebbad4260e08e664da739133865001c7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 4.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861473005738222028, guid: ebbad4260e08e664da739133865001c7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 4.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861473005738222028, guid: ebbad4260e08e664da739133865001c7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861473005738222028, guid: ebbad4260e08e664da739133865001c7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3229213561359126703, guid: ebbad4260e08e664da739133865001c7,
         type: 3}
       propertyPath: isParticipantsCar
@@ -487,6 +507,7 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+
     - target: {fileID: 5098857240303262175, guid: ebbad4260e08e664da739133865001c7,
         type: 3}
       propertyPath: m_Color.r
@@ -512,6 +533,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+
+    - target: {fileID: 6552447421629750266, guid: ebbad4260e08e664da739133865001c7,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -1319278099071596514, guid: c62d99b419248cf44a80f6b14279cb2f,
+        type: 3}
+
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebbad4260e08e664da739133865001c7, type: 3}
 --- !u!1 &6229045286058875577 stripped
