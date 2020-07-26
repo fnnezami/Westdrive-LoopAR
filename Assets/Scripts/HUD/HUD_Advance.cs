@@ -90,6 +90,7 @@ public class HUD_Advance : MonoBehaviour
                 ManualDrive();
                 _carController.gameObject.GetComponent<ControlSwitch>().SwitchControl(ManualDriving);
             }
+            //Debug.Log("Dreieck Aus");
         }
 
     }
@@ -155,10 +156,10 @@ public class HUD_Advance : MonoBehaviour
         EventDriving = false;
         YouDriving.enabled = false;
         YouDrivingText.enabled = false;
-        ManualDriving = false;
         //Take over request back Image && Text && Sound -> maybe Blinking 
         //start NonEventDisplays
         //start AI DrivingSign
+        Debug.Log("Aidrive start");
 
         if (playTOR)
         {
@@ -239,6 +240,7 @@ public class HUD_Advance : MonoBehaviour
         {
             StartCoroutine(ShowForSeconds(WarningSignDuration));
         }
+        //Debug.Log("Warum bin ich hier?");
         StartCoroutine(SoundManagerWarning());
         StartCoroutine(ShowAfterSeconds());
 
@@ -298,15 +300,18 @@ public class HUD_Advance : MonoBehaviour
         }
         else
         {
+            Debug.Log("TOR");
             WarningText.enabled = false;
             WarningTriangle.enabled = false;
             if (nextUpdate > 10)
             {
                 TorBackSign.enabled = true;
                 TorBackText.enabled = true;
+                Debug.Log(" Tor startet");
             }
 
         }
+        Debug.Log("Tor sollte Enden");
         yield return new WaitForSeconds(TorBackDuration);
         WarningText.enabled = false;
         WarningTriangle.enabled = false;

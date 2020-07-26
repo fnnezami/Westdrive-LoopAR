@@ -11,7 +11,7 @@ public class DynamicCarSound : MonoBehaviour
     private float _currentSpeedinKmH;
     private int Gear;
     private int RPM;
-    private float nextUpdate = 1;
+    private float nextUpdate = 2;
     private int currentGear;
     // Start is called before the first frame update
     void Start()
@@ -73,76 +73,23 @@ public class DynamicCarSound : MonoBehaviour
     {
         if (_currentSpeedinKmH < 15f)
         {
-            if (Gear < 1 || Gear == 2)
-            {
-                Gear = 1;
-            }
-            else
-            {
-                Gear --;
-            }
-
+            Gear = 1;
         }
         else if (_currentSpeedinKmH > 15f && _currentSpeedinKmH < 40f)
         {
-            if (Gear == 1)
-            {
-                Gear = 2;
-            }
-            else if (Gear < 1)
-            {
-                Gear++;
-            }
-            else if (Gear > 2)
-            {
-                Gear--;
-            }
-
+            Gear = 2;
         }
         else if (_currentSpeedinKmH > 40f && _currentSpeedinKmH < 60f)
         {
-            if (Gear == 2)
-            {
-                Gear = 3;
-            }
-            else if (Gear < 2)
-            {
-                Gear++;
-            }
-            else if (Gear > 3)
-            {
-                Gear--;
-            }
+            Gear = 3;
         }
         else if (_currentSpeedinKmH > 60f && _currentSpeedinKmH < 80f)
         {
-            if (Gear == 3)
-            {
-                Gear = 4;
-            }
-            else if (Gear < 3)
-            {
-                Gear++;
-            }
-            else if (Gear > 4)
-            {
-                Gear--;
-            }
+            Gear = 4;
         }
         else if (_currentSpeedinKmH < 115f)
         {
-            if (Gear == 4)
-            {
-                Gear = 5;
-            }
-            else if (Gear < 4)
-            {
-                Gear++;
-            }
-            else if (Gear > 5)
-            {
-                Gear--;
-            }
+            Gear = 5;
         }
         else if (_currentSpeedinKmH > 150f)
         {
