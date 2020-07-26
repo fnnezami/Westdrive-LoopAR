@@ -175,14 +175,22 @@ public class MainMenu : MonoBehaviour
                     _section = Section.SeatCalibration;
                     CalibrationManager.Instance.SeatCalibration();
                 }
-            }
-            else if (CalibrationManager.Instance.GetSeatCalibrationState())
+            } 
+            /*else if (CalibrationManager.Instance.GetSeatCalibrationState() && !CalibrationManager.Instance.GetTestDriveState())
             {
-                if (GUI.Button(new Rect(xForButtons, yForButtons, buttonWidth, buttonHeight), "Main Experiment"))
+                if (GUI.Button(new Rect(xForButtons, yForButtons, buttonWidth, buttonHeight), "Training Block"))
+                {
+                    _section = Section.TrainingBlock; 
+                    SceneManager.LoadSceneAsync("TestDrive2.0");
+                }
+            }*/
+            else if (CalibrationManager.Instance.GetSeatCalibrationState() /*CalibrationManager.Instance.GetTestDriveState()*/)
+            {
+                if (GUI.Button(new Rect(xForButtons, yForButtons, buttonWidth, buttonHeight), "Start Experiment"))
                 {
                     _section = Section.MainExperiment; 
                     // TODO check with calibration manager if it is allowed to go to the experiment (not mvp)
-                    SceneManager.LoadSceneAsync("safe-mountainroad01");
+                    SceneLoadingHandler.Instance.SceneChange("MountainRoad");
                 }
             }
         }
@@ -191,11 +199,28 @@ public class MainMenu : MonoBehaviour
             GUI.backgroundColor = Color.cyan;
             GUI.color = Color.white;
             
-            if (GUI.Button(new Rect(xForButtons, yForButtons, buttonWidth, buttonHeight), "Main Experiment"))
+            if (GUI.Button(new Rect(xForButtons, yForButtons, buttonWidth, buttonHeight), "Start Experiment"))
             {
                 _section = Section.MainExperiment;
-                SceneManager.LoadSceneAsync("safe-mountainroad01");
+                SceneLoadingHandler.Instance.SceneChange("MountainRoad");
             }
+            
+            /*if (!CalibrationManager.Instance.GetTestDriveState())
+            {
+                if (GUI.Button(new Rect(xForButtons, yForButtons, buttonWidth, buttonHeight), "Training Block"))
+                {
+                    _section = Section.TrainingBlock; 
+                    SceneManager.LoadSceneAsync("TestDrive2.0");
+                }
+            }
+            else if (CalibrationManager.Instance.GetTestDriveState())
+            {
+                if (GUI.Button(new Rect(xForButtons, yForButtons, buttonWidth, buttonHeight), "Start Experiment"))
+                {
+                    _section = Section.MainExperiment;
+                    SceneManager.LoadSceneAsync("safe-mountainroad01");
+                }
+            }*/
         }
     }
 

@@ -119,7 +119,7 @@ public class HUD_Advance : MonoBehaviour
             _highlightedObjects.Add(eventObject);
         }
     }
-    public void DeactivateHUD()
+    public void DeactivateHUD(bool playTOR = true)
     {
         IsEvent = false;
         _eventObjectsToMark.Clear();
@@ -129,7 +129,7 @@ public class HUD_Advance : MonoBehaviour
         _highlightedObjects.Clear();
         if (!ManualDriving)
         {
-            AIDrive();
+            AIDrive(playTOR);
         }
         else
         {
@@ -147,9 +147,11 @@ public class HUD_Advance : MonoBehaviour
         }
 
     }
-    public void AIDrive()
+    public void AIDrive(bool playTOR = true)
     {
         AIDrivingBool = true;
+        ManualDriving = false;
+
         EventDriving = false;
         YouDriving.enabled = false;
         YouDrivingText.enabled = false;
@@ -158,7 +160,12 @@ public class HUD_Advance : MonoBehaviour
         //start NonEventDisplays
         //start AI DrivingSign
 
-        StartCoroutine(SoundManagerTOR());
+        if (playTOR)
+        {
+            Debug.Log(playTOR + " Is it played?");
+            StartCoroutine(SoundManagerTOR());
+        }
+        
         StartCoroutine(ShowAfterSeconds());
 
         if (TorBackBlinkingImage || TorBackBlinkingText)

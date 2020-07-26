@@ -407,6 +407,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2861473005738222028, guid: ebbad4260e08e664da739133865001c7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 4.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861473005738222028, guid: ebbad4260e08e664da739133865001c7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 4.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861473005738222028, guid: ebbad4260e08e664da739133865001c7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861473005738222028, guid: ebbad4260e08e664da739133865001c7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3229213561359126703, guid: ebbad4260e08e664da739133865001c7,
         type: 3}
       propertyPath: isParticipantsCar
@@ -485,31 +505,6 @@ PrefabInstance:
     - target: {fileID: 4922103806014006297, guid: ebbad4260e08e664da739133865001c7,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5098857240303262175, guid: ebbad4260e08e664da739133865001c7,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0.9529412
-      objectReference: {fileID: 0}
-    - target: {fileID: 5098857240303262175, guid: ebbad4260e08e664da739133865001c7,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.031372532
-      objectReference: {fileID: 0}
-    - target: {fileID: 5098857240303262175, guid: ebbad4260e08e664da739133865001c7,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.92113906
-      objectReference: {fileID: 0}
-    - target: {fileID: 5139552655832291955, guid: ebbad4260e08e664da739133865001c7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5139715970586371103, guid: ebbad4260e08e664da739133865001c7,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
