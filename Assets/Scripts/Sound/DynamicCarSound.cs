@@ -11,7 +11,7 @@ public class DynamicCarSound : MonoBehaviour
     private float _currentSpeedinKmH;
     private int Gear;
     private int RPM;
-    private float nextUpdate = 2;
+    private float nextUpdate = 1;
     private int currentGear;
     // Start is called before the first frame update
     void Start()
