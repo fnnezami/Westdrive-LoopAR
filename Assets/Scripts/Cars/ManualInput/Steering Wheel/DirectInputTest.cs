@@ -43,7 +43,7 @@ public class DirectInputTest : MonoBehaviour
         
             IList<DeviceInstance> _deviceList = new List<DeviceInstance>();
 
-            _deviceList = _directInput.GetDevices(DeviceType.Driving, DeviceEnumerationFlags.ForceFeedback);
+            _deviceList = _directInput.GetDevices(DeviceType.Driving, DeviceEnumerationFlags.ForceFeedback); // we reduce our input just to driving devices which provide Force feedback
             
             
             // interating through the devices to see if everything is up and running
@@ -57,8 +57,11 @@ public class DirectInputTest : MonoBehaviour
             joystick0 = new Joystick(_directInput, _deviceList[0].InstanceGuid);    
             joystick1 = new Joystick(_directInput, _deviceList[1].InstanceGuid);
         
-            //here come the test effects...
-        
+            //heres come the test effects parameters... we need to set those paramaters effect for Force Feedback
+            
+            
+            ep = new EffectParameters();
+
             ep.Flags = EffectFlags.Cartesian | EffectFlags.ObjectOffsets;
             ep.Directions = new int[1] { 0 };
             ep.Gain = 5000;
@@ -70,53 +73,28 @@ public class DirectInputTest : MonoBehaviour
             EffectFile eff= new EffectFile();
     
             eff.Parameters = ep;
-
-            // Debug.Log("____Effect List_____");
-
-
-            // var effs = joystick1.GetEffects();
-
-            //foreach (var ef in effs)
-            //{
-            //EffectObject feo = new EffectObject(
-            //fe.EffectGuid,
-            //fe.EffectStruct,
-            //   joystick);
-            // Debug.Log(ef.Type + "  ef parameters " + ef.StaticParameters);
-            //}
-            var pointer = joystick1.NativePointer;
             
-            joystick1.SetCooperativeLevel(GetActiveWindow(), CooperativeLevel.Exclusive| CooperativeLevel.Background);
-            // e = new Effect(joystick1, _deviceList[0].ForceFeedbackDriverGuid, ep);
-
-            //EffectObject effectObject;
-
-
-            //joystick1.Get
-
-
-            //Debug.Log(e.Status);
+            
+            
+            
+            // var pointer = joystick1.NativePointer;  //unfortunately this didnt worked for the window handle
+            
+            // the device cooperative level basically  just identifies, if the device is receiving input when the window is not active.
+            // we needed to create this GetActiveWindow Handle for this
+            joystick0.SetCooperativeLevel(GetActiveWindow(), CooperativeLevel.Exclusive| CooperativeLevel.Background);
+            
+            
+            
+             e = new Effect(joystick1, joystick0.GetEffects()[0].Guid, ep);        // Here we get some error
+             
 
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
+        //To see if something is going out.
+        //Debug.Log(joystick0.GetCurrentState());
         
-        
-       // Effect e = new Effect(joystick1,joystick1.Information.InstanceGuid, ep);
-        //e.Start();
-        //Debug.Log(joystick3.GetCurrentState());
-        //Debug.Log(joystick1.GetForceFeedbackState());
-       // var data = joystick1.GetBufferedData();
-
-        //foreach (var item in data)
-       // {
-            //Debug.Log(item.ToString() + " " +  item.Value);
-       // }
-
-        //Debug.Log("joy2 " +joystick1.GetForceFeedbackState());
-        //Debug.Log("joy3 " +joystick2.GetForceFeedbackState());
     }
 }
 
