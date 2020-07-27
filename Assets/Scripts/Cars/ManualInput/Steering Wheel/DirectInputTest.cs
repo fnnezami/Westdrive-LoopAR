@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using SharpDX;
 using SharpDX.DirectInput;
@@ -9,14 +10,26 @@ using UnityEditor;
 using ConstantForce = SharpDX.DirectInput.ConstantForce;
 using DeviceType = SharpDX.DirectInput.DeviceType;
 
+
+
+
+
 public class DirectInputTest : MonoBehaviour
 {
+    
+    [DllImport("user32.dll")]
+    private static extern System.IntPtr GetActiveWindow();
+     
+    public static System.IntPtr GetWindowHandle() {
+        return GetActiveWindow();
+    }
+    
     private DirectInput _directInput;
     // Start is called before the first frame update
     
     
+    private Joystick joystick0;
     private Joystick joystick1;
-    private Joystick joystick2;
 
 
 
@@ -31,25 +44,26 @@ public class DirectInputTest : MonoBehaviour
             IList<DeviceInstance> _deviceList = new List<DeviceInstance>();
 
             _deviceList = _directInput.GetDevices(DeviceType.Driving, DeviceEnumerationFlags.ForceFeedback);
-
-            Guid _racingDeviceGuid;
-        
+            
+            
+            // interating through the devices to see if everything is up and running
+            
             foreach (var device in _deviceList)
             {
                 Debug.Log(device.ProductName + " " + device.InstanceGuid + " " +  device.Usage);
             }
         
+            // we have two steering wheels , actually only 0 seems be manipulatable. We stick with 0
+            joystick0 = new Joystick(_directInput, _deviceList[0].InstanceGuid);    
+            joystick1 = new Joystick(_directInput, _deviceList[1].InstanceGuid);
         
-            joystick1 = new Joystick(_directInput, _deviceList[0].InstanceGuid);
-            joystick2 = new Joystick(_directInput, _deviceList[1].InstanceGuid);
-        
-            //here come the effects...
+            //here come the test effects...
         
             ep.Flags = EffectFlags.Cartesian | EffectFlags.ObjectOffsets;
             ep.Directions = new int[1] { 0 };
             ep.Gain = 5000;
             ep.Duration = int.MaxValue;
-            ep.SamplePeriod = joystick1.Capabilities.ForceFeedbackSamplePeriod;
+            ep.SamplePeriod = joystick0.Capabilities.ForceFeedbackSamplePeriod;
             CF.Magnitude = 10000;
             ep.Parameters = CF;
         
@@ -72,7 +86,7 @@ public class DirectInputTest : MonoBehaviour
             //}
             var pointer = joystick1.NativePointer;
             
-            joystick1.SetCooperativeLevel(pointer, CooperativeLevel.Exclusive| CooperativeLevel.Background);
+            joystick1.SetCooperativeLevel(GetActiveWindow(), CooperativeLevel.Exclusive| CooperativeLevel.Background);
             // e = new Effect(joystick1, _deviceList[0].ForceFeedbackDriverGuid, ep);
 
             //EffectObject effectObject;
@@ -105,5 +119,6 @@ public class DirectInputTest : MonoBehaviour
         //Debug.Log("joy3 " +joystick2.GetForceFeedbackState());
     }
 }
+
 
 
