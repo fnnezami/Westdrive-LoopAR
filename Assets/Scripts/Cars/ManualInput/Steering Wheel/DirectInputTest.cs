@@ -12,8 +12,6 @@ using DeviceType = SharpDX.DirectInput.DeviceType;
 
 
 
-
-
 public class DirectInputTest : MonoBehaviour
 {
     
