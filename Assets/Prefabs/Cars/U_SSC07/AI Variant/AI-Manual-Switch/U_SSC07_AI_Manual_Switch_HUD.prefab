@@ -566,6 +566,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HUD_Advanced
       objectReference: {fileID: 0}
+    - target: {fileID: 7421621293464889408, guid: 025df11c42a2ad94b8ab52b56a1a48fd,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.03
+      objectReference: {fileID: 0}
     - target: {fileID: 8399417371711320918, guid: 025df11c42a2ad94b8ab52b56a1a48fd,
         type: 3}
       propertyPath: _carController
