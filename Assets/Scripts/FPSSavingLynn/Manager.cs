@@ -23,7 +23,6 @@ public class Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         times = new List<double>();
     }
 
@@ -84,11 +83,11 @@ public class Manager : MonoBehaviour
                 return Application.dataPath + "/Data/" + "Saved_FPS.csv";
                 //"Participant " + "   " + DateTime.Now.ToString("dd-MM-yy   hh-mm-ss") + ".txt";
         #elif UNITY_ANDROID
-                            return Application.persistentDataPath+"Saved_Inventory.csv";
+                            return Application.persistentDataPath+"Saved_FPS.csv";
         #elif UNITY_IPHONE
-                            return Application.persistentDataPath+"/"+"Saved_Inventory.csv";
+                            return Application.persistentDataPath+"/"+"Saved_FPS.csv";
         #else
-                            return Application.dataPath +"/"+"Saved_Inventory.csv";
+                            return Application.dataPath +"/"+"Saved_FPS.csv";
         #endif
     }
 }
