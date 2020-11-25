@@ -3,7 +3,17 @@ guid: ab617f64f81341648af33a32bc22db2a
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RHE_Spruce_Leaves.004
+    second: {fileID: 2100000, guid: 1721d0c7a20f7a741b2ca88da2f9a854, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RHE_Spruce_Trunk.004
+    second: {fileID: 2100000, guid: 31f7fd9bfac042f4fafb6e9fd2ba5ad1, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
