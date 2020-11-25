@@ -12,14 +12,15 @@ public class Manager : MonoBehaviour
 {
  
 
-    public int Granularity = 50; // how many frames to wait until you re-calculate the FPS
-    List<double> times;
-    int counter = 5;
+    public int Granularity = 40; // how many frames to wait until you re-calculate the FPS
+    List<double> times; //List of times to average over
+    int counter = 40;
 
     private int fpsint;
     
-    public bool running = true; 
-    public List<int> _frameRates;
+    public bool running; //checks if the script should collect data or not 
+    public List<int> _frameRates; // List of all recorded frame rates
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -29,16 +30,21 @@ public class Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (counter <= 0)
+        if (running) 
         {
-            CalcFPS ();
-            counter = Granularity;
-        } 
+            if (counter <= 0)
+            {
+                CalcFPS (); 
+                counter = Granularity; // resets the counter 
+            } 
 
-        times.Add (Time.deltaTime);
-        counter--; 
+            times.Add (Time.deltaTime); // adds the completion time in seconds since the last frame to a list
+            counter--; 
+        }
+
     }
     
+    //Calculates an average fps from the last frames 
     public void CalcFPS ()
     {
         double sum = 0;
@@ -47,10 +53,10 @@ public class Manager : MonoBehaviour
             sum += F;
         }
 
-        double average = sum / times.Count;
-        double fps = 1/average;
+        double average = sum / times.Count; //averages the needed time to complete one frame
+        double fps = 1/average; //calculation from time needed to fps
         
-        times.Clear();
+        times.Clear(); //clears
 
         fpsint = Convert.ToInt32(fps);
         _frameRates.Add(fpsint);
@@ -58,6 +64,7 @@ public class Manager : MonoBehaviour
     }
 
 
+    //saves the collected frames into a csv file
     public void Save()
     {
         string filePath = getPath();
@@ -77,11 +84,13 @@ public class Manager : MonoBehaviour
 
          
     }
+    
+    //get the path where to save the collected fps
     private string getPath()
     {
         #if UNITY_EDITOR
-                return Application.dataPath + "/Data/" + "Saved_FPS.csv";
-                //"Participant " + "   " + DateTime.Now.ToString("dd-MM-yy   hh-mm-ss") + ".txt";
+                            return Application.dataPath + "/Data/" + "Saved_FPS.csv";
+                
         #elif UNITY_ANDROID
                             return Application.persistentDataPath+"Saved_FPS.csv";
         #elif UNITY_IPHONE
