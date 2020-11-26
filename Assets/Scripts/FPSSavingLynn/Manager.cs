@@ -24,6 +24,7 @@ public class Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = -1;
         times = new List<double>();
     }
 
@@ -73,13 +74,24 @@ public class Manager : MonoBehaviour
 
         using (StreamWriter writer = new StreamWriter(filePath))
         {
-           
+            int sum2 = 0;
+            foreach (int I in _frameRates)
+            {
+                sum2 += I;
+            }
+
+            int fpsall = 0;
+            fpsall = sum2 / _frameRates.Count;
+            
         
             for (int i = 0; i < Mathf.Max(_frameRates.Count); ++i)
             {
                 if (i < _frameRates.Count) writer.Write(_frameRates[i]);
                 writer.Write(",");
             } 
+            
+            writer.WriteLine();
+            writer.Write(fpsall);
         }
 
          
