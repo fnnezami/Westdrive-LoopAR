@@ -188,6 +188,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ApplicationManagerGroup
       objectReference: {fileID: 0}
+    - target: {fileID: 4387108083749689383, guid: bdce35fddd80f794ea98036b2bdd8990,
+        type: 3}
+      propertyPath: m_OcclusionCulling
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdce35fddd80f794ea98036b2bdd8990, type: 3}
 --- !u!4 &307705960 stripped
