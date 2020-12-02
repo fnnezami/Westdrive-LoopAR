@@ -8,7 +8,7 @@ public class FPSStartingTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         GameObject fps = GameObject.Find("FPSManager");
-        Manager fpsScript = fps.GetComponent<Manager>();
+        SecondFPS fpsScript = fps.GetComponent<SecondFPS>();
         fpsScript.running = true;
     }
 }

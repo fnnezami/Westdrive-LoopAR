@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public class FPSTrigger : MonoBehaviour
 {
     public List<int> myframeRates;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +26,7 @@ public class FPSTrigger : MonoBehaviour
     {
         
         GameObject fps = GameObject.Find("FPSManager");
-        Manager fpsScript = fps.GetComponent<Manager>();
+        SecondFPS fpsScript = fps.GetComponent<SecondFPS>();
         myframeRates = fpsScript._frameRates;
         
 
