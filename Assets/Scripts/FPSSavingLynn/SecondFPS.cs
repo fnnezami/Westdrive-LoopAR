@@ -21,8 +21,8 @@ public class SecondFPS : MonoBehaviour
     public bool running; //checks if the script should collect data or not 
     public List<int> _frameRates; // List of all recorded frame rates
 
-    public string condition;
-    public string scene;
+    public string condition; //variable for the csv data
+    public string scene; //variable for the csv data
     
     
     private void Awake()
@@ -44,8 +44,8 @@ public class SecondFPS : MonoBehaviour
         {
             times.Add (Time.deltaTime);
             elapsed += Time.deltaTime;
-            if (elapsed >= 0.5f) {
-                elapsed = elapsed % 0.5f;
+            if (elapsed >= 0.5f) { //if half a second is passed
+                elapsed = elapsed % 0.5f; //resets elapsed
                 
                 CalcFPS ();
             }
@@ -115,11 +115,11 @@ public class SecondFPS : MonoBehaviour
                             return Application.dataPath + "/Data/" + condition +  "_" + scene + ".csv";
                 
         #elif UNITY_ANDROID
-                            return Application.persistentDataPath+"Saved_FPS.csv";
+                            return Application.persistentDataPath+ condition +  "_" + scene + ".csv";
         #elif UNITY_IPHONE
-                            return Application.persistentDataPath+"/"+"Saved_FPS.csv";
+                            return Application.persistentDataPath+"/"+" condition +  "_" + scene + ".csv";
         #else
-                            return Application.dataPath +"/"+"Saved_FPS.csv";
+                            return Application.dataPath +"/"+ condition +  "_" + scene + ".csv";
         #endif
     }
 }
