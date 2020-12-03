@@ -13,7 +13,7 @@ public class SecondFPS : MonoBehaviour
  
 
     float elapsed = 0f;
-    List<double> times; //List of times to average over
+    public List<double> times; //List of times to average over
    
 
     private int fpsint;
@@ -22,6 +22,13 @@ public class SecondFPS : MonoBehaviour
     public List<int> _frameRates; // List of all recorded frame rates
 
     public string condition;
+    public string scene;
+    
+    
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -51,7 +58,7 @@ public class SecondFPS : MonoBehaviour
         double sum = 0;
         foreach (double F in times)
         {
-            sum += F;
+            sum += F; //calculates the time needed for all frames
         }
 
         double average = sum / times.Count; //averages the needed time to complete one frame
@@ -59,19 +66,21 @@ public class SecondFPS : MonoBehaviour
         
         times.Clear(); //clears
 
+        //saves the fps to a list
         fpsint = Convert.ToInt32(fps);
         _frameRates.Add(fpsint);
-        // update a GUIText or something
+
     }
 
 
     //saves the collected frames into a csv file
     public void Save()
     {
-        string filePath = getPath();
+        string filePath = GetPath();
         
 
 
+        //write the calculated fps into a csv file
         using (StreamWriter writer = new StreamWriter(filePath))
         {
 
@@ -97,14 +106,13 @@ public class SecondFPS : MonoBehaviour
             
         }
 
-         
     }
     
     //get the path where to save the collected fps
-    private string getPath()
+    private string GetPath()
     {
         #if UNITY_EDITOR
-                            return Application.dataPath + "/Data/" + condition + ".csv";
+                            return Application.dataPath + "/Data/" + condition +  "_" + scene + ".csv";
                 
         #elif UNITY_ANDROID
                             return Application.persistentDataPath+"Saved_FPS.csv";

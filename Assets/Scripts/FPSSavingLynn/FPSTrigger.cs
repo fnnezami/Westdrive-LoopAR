@@ -27,7 +27,7 @@ public class FPSTrigger : MonoBehaviour
         
         GameObject fps = GameObject.Find("FPSManager");
         SecondFPS fpsScript = fps.GetComponent<SecondFPS>();
-        myframeRates = fpsScript._frameRates;
+        // myframeRates = fpsScript._frameRates;
         
 
         fpsScript.running = false;
