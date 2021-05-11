@@ -36,10 +36,17 @@ public class InputRecorder: MonoBehaviour
     {
         while (!_recordingEnded)
         {
-            InputDataFrame inputDataFrame = new InputDataFrame();
-        
-            inputDataFrame.TimeStamp = TimeManager.Instance.GetCurrentUnixTimeStamp();
-        
+            InputDataFrame inputDataFrame = new InputDataFrame
+            {
+                TimeStamp = TimeManager.Instance.GetCurrentUnixTimeStamp(),
+                CarPosition = _participantCar.transform.position,
+                CarRotation = _participantCar.transform.rotation.eulerAngles,
+                CarRotationQuaternion = _participantCar.transform.rotation,
+                LocalCarPosition = _participantCar.transform.localPosition
+            };
+
+
+
             if (Math.Abs(_steeringInput) > 0 || Math.Abs(_accelerationInput) > 0 || Math.Abs(_brakeInput) > 0)
             {
                 inputDataFrame.ReceivedInput = true;
