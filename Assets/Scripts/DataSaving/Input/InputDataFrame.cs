@@ -10,4 +10,9 @@ using UnityEngine;
     public float SteeringInput;
     public float AcellerationInput;
     public float BrakeInput;
+
+    public Vector3 CarPosition;
+    public Vector3 LocalCarPosition;
+    public Vector3 CarRotation;
+    public Quaternion CarRotationQuaternion;
 }
